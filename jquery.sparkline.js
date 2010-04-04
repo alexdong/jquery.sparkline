@@ -191,11 +191,15 @@
 
                 $.fn.sparkline[options.type].call(this, values, options, width, height);
             }
-            // jQuery 1.3.0 completely changed the meaning of :hidden :-/
-            if (($(this).html() && $(this).is(':hidden')) || ($.fn.jquery < "1.3.0" && $(this).parents().is(':hidden'))) {
-                pending.push([this, render]);
-            } else {
-                render.call(this);
+
+            // Don't overwrite existing line charts. 
+            if (!$(this).children('canvas').length) {
+                // jQuery 1.3.0 completely changed the meaning of :hidden :-/
+                if (($(this).html() && $(this).is(':hidden')) || ($.fn.jquery < "1.3.0" && $(this).parents().is(':hidden'))) {
+                    pending.push([this, render]);
+                } else {
+                    render.call(this);
+                }
             }
         });
     };
